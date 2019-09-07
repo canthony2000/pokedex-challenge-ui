@@ -1,17 +1,11 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
+import { Select, MenuItem, InputLabel } from '@material-ui/core'
 import { gql } from 'apollo-boost'
 import _ from 'lodash'
-
 import SearchBox from '../../components/SearchBox'
 import PokemonCard from '../../components/PokemonCard'
 import * as S from './styled'
-
-import { Select, MenuItem, InputLabel } from '@material-ui/core'
-
-function handleChange() {
-  console.log('changing');
-}
 
 export default function HomeScreen() {
   const { loading, error, data } = useQuery(gql`
@@ -25,6 +19,18 @@ export default function HomeScreen() {
       }
     }
   `)
+
+  const [values, setValues] = React.useState({
+    searchOpt: 1,
+  });
+
+  function handleChange(event) {
+    setValues(oldValues => ({
+      ...oldValues,
+      [event.target.name]: event.target.value,
+    }));
+  }
+
   if (loading)
     return (
       <S.Container>
@@ -41,19 +47,19 @@ export default function HomeScreen() {
     <S.Container>
       <h1>Pokédex</h1>
 
-      <InputLabel htmlFor="age-helper">Search On</InputLabel>
-      <Select
-        value={1}
-        onChange={handleChange}
-        inputProps={{
-          name: 'age',
-          id: 'age-simple',
-        }}
-      >
-        <MenuItem value={1}>All</MenuItem>
-        <MenuItem value={2}>Type</MenuItem>
-        <MenuItem value={3}>Weaknesses</MenuItem>
-      </Select>
+      <InputLabel htmlFor="search-select">Search On...</InputLabel>
+        <Select
+          value={values.searchOpt}
+          onChange={handleChange}
+          inputProps={{
+            name: 'searchOpt',
+            id: 'search-select',
+          }}
+        >
+          <MenuItem value={1}>All</MenuItem>
+          <MenuItem value={2}>Type</MenuItem>
+          <MenuItem value={3}>Weakness</MenuItem>
+        </Select>
 
       <SearchBox
         suggestions={data.pokemonMany.map(pokemon => ({
