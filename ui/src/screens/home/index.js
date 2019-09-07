@@ -7,6 +7,12 @@ import SearchBox from '../../components/SearchBox'
 import PokemonCard from '../../components/PokemonCard'
 import * as S from './styled'
 
+import { Select, MenuItem, InputLabel } from '@material-ui/core'
+
+function handleChange() {
+  console.log('changing');
+}
+
 export default function HomeScreen() {
   const { loading, error, data } = useQuery(gql`
     {
@@ -34,6 +40,21 @@ export default function HomeScreen() {
   return (
     <S.Container>
       <h1>Pokédex</h1>
+
+      <InputLabel htmlFor="age-helper">Search On</InputLabel>
+      <Select
+        value={1}
+        onChange={handleChange}
+        inputProps={{
+          name: 'age',
+          id: 'age-simple',
+        }}
+      >
+        <MenuItem value={1}>All</MenuItem>
+        <MenuItem value={2}>Type</MenuItem>
+        <MenuItem value={3}>Weaknesses</MenuItem>
+      </Select>
+
       <SearchBox
         suggestions={data.pokemonMany.map(pokemon => ({
           label: pokemon.name,
