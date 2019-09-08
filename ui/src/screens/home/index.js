@@ -21,7 +21,7 @@ export default function HomeScreen() {
   `)
 
   const [values, setValues] = React.useState({
-    searchOpt: 1,
+    searchOpt: 0,
   });
 
   function handleChange(event) {
@@ -29,6 +29,15 @@ export default function HomeScreen() {
       ...oldValues,
       [event.target.name]: event.target.value,
     }));
+  }
+
+  function searchString(pokemon) {
+    if (values.searchOpt === 1) {
+      return pokemon.type.toString().toLowerCase()
+    } else if (values.searchOpt === 2) {
+      return pokemon.weaknesses.toString().toLowerCase()
+    }
+    return pokemon.name.toLowerCase()
   }
 
   if (loading)
@@ -46,7 +55,6 @@ export default function HomeScreen() {
   return (
     <S.Container>
       <h1>Pokédex</h1>
-
       <InputLabel htmlFor="search-select">Search On...</InputLabel>
         <Select
           value={values.searchOpt}
@@ -56,9 +64,9 @@ export default function HomeScreen() {
             id: 'search-select',
           }}
         >
-          <MenuItem value={1}>All</MenuItem>
-          <MenuItem value={2}>Type</MenuItem>
-          <MenuItem value={3}>Weakness</MenuItem>
+          <MenuItem value={0}>Name</MenuItem>
+          <MenuItem value={1}>Type</MenuItem>
+          <MenuItem value={2}>Weakness</MenuItem>
         </Select>
 
       <SearchBox
@@ -72,7 +80,7 @@ export default function HomeScreen() {
             {data.pokemonMany
               .filter(pokemon =>
                 searchValue
-                  ? _.deburr(pokemon.name.toLowerCase()).includes(
+                  ? _.deburr(searchString(pokemon)).includes(
                       _.deburr(searchValue.toLowerCase())
                     )
                   : true
