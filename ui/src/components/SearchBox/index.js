@@ -8,7 +8,6 @@ import * as S from './styled'
 
 function renderInput(inputProps) {
   const { InputProps, ref, ...other } = inputProps
-
   return (
     <S.Input
       InputProps={{
