@@ -13,7 +13,7 @@ import * as S from './styled'
 export default function PokemonScreen({ num }) {
   const { loading, error, data } = useQuery(gql`
     {
-      pokemonOne(id: ${num.replace(/0/g, '')}) {
+      pokemonOne(id: ${num.replace(/^0+/g, '')}) {
         num
         name
         img
